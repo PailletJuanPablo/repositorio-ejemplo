@@ -52,6 +52,27 @@ var paths = {
     build: 'lib/',
 };
 
+
+gulp.task('copyTypings', function () {
+    return gulp.src('src/*.d.ts')
+        // Add header
+        .pipe(header(banner))
+
+        // Write to build directory
+        .pipe(gulp.dest(paths.build))
+});
+
+
+gulp.task('copyTypings', function () {
+    return gulp.src('src/*.d.ts')
+        // Add header
+        .pipe(header(banner))
+
+        // Write to build directory
+        .pipe(gulp.dest(paths.build))
+});
+
+
 // Create a separate project for buildProject that overrides the rootDir
 // This ensures that the generated production files are in their own root
 // rather than including both src and test in the lib dir.
@@ -114,16 +135,3 @@ gulp.task('copyTypings', function () {
         // Write to build directory
         .pipe(gulp.dest(paths.build))
 });
-
-gulp.task('compile_all', gulp.series('compile', 'copyDatabase', 'copyTypings', 'compile_test'));
-
-// Regenerates js every time a source file changes
-gulp.task('watch', function () {
-    gulp.watch(paths.src.concat(paths.test), { ignoreInitial: false }, gulp.series('compile_all'));
-});
-
-// Build task
-gulp.task('build', gulp.series('cleanup', 'compile', 'copyDatabase', 'copyTypings'));
-
-// Default task
-gulp.task('default', gulp.series('build'));
