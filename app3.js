@@ -86,6 +86,14 @@ var banner = `/*! firebase-admin v${pkg.version} */\n`;
 /*  TASKS  */
 /***********/
 
+
+gulp.task('compile_test', function () {
+    return gulp.src(paths.test)
+        // Compile Typescript into .js and .d.ts files
+        .pipe(buildTest())
+});
+
+
 gulp.task('cleanup', function () {
     return del([
         paths.build,
@@ -135,3 +143,11 @@ gulp.task('copyTypings', function () {
         // Write to build directory
         .pipe(gulp.dest(paths.build))
 });
+
+gulp.task('compile_all', gulp.series('compile', 'copyDatabase', 'copyTypings', 'compile_test'));
+
+// Build task
+gulp.task('build', gulp.series('cleanup', 'compile', 'copyDatabase', 'copyTypings'));
+
+// Default task
+gulp.task('default', gulp.series('build'));
